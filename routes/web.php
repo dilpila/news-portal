@@ -14,3 +14,10 @@
 Route::get('/', function () {
     return view('dashboard');
 })->name("dashboard");
+
+Route::resource('category', 'CategoryController', ['except' => ['destroy','show','update']]);
+Route::get('/delete', 'CategoryController@destroy')->name('category.delete'); //delete request
+Route::get('/update/{id}', 'CategoryController@update')->name('category.update');
+
+Route::resource('news', 'CategoryController');
+
