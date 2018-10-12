@@ -4,51 +4,51 @@ namespace App\Http\Services;
 
 use App;
 use App\Models\Category;
+use App\Models\News;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Yajra\DataTables\DataTables;
 
-class CategoryService
+class NewsService
 {
     use softDeletes;
     /**
      * @var Category
      */
-    protected $category;
+    protected $news;
 
 
-    public function __construct(Category $category)
+    public function __construct(News $news)
     {
-        $this->category = $category;
+        $this->news = $news;
     }
-
 
     public function dataTable()
     {
-        $query = Category::all();
+        $query = News::all();
         return Datatables::of($query)->addColumn('actions', '')->make(true);
-    }
-    public function getAll()
-    {
-        return $this->category->orderBy('created_at','desc')->get();
     }
 
     public function create($attr)
     {
-        return $this->category->create($attr);
+        return $this->news->create($attr);
     }
 
     public function find($id)
     {
-        return $this->category->find($id);
+        return $this->news->find($id);
     }
 
     public function update($request, $id)
     {
-        return $this->category->where('id', $id)->update($request);
+        return $this->news->where('id', $id)->update($request);
     }
 
     public function delete($request)
     {
-        return $this->category->where('id', $request->id)->delete();
+        $news = $this->find($request['id']);
+        $path = public_path() . $news->image;
+        \File::delete($path);
+        $news->delete();
+        return $news;
     }
 }

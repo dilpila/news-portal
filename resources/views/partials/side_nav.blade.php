@@ -11,7 +11,10 @@
                     <span>Dashboard</span>
                 </a>
             </li>
-            <li class="treeview {{$route=='category.index'||$route=='news.index'?'active':''}}">
+            <li class="treeview {{
+                $route=='category.index' || $route == 'category.create' || $route == 'category.edit'
+                ||$route=='news.index' || $route == 'news.create' || $route == 'news.edit' || $route == 'news.view'
+            ?'active':''}}">
                 <a href="#">
                   <i class="fa fa-envelope"></i> <span>News Portal</span>
                   <span class="pull-right-container">
@@ -19,8 +22,8 @@
                   </span>
                 </a>
                 <ul class="treeview-menu">
-                    <li class="{{$route=='category.index'?'active':''}}"><a href="{{route('category.index')}}"><i class="fa fa-angle-double-right"></i> <span>Category</span></a></li>
-                    <li class="{{$route=='news.index'?'active':''}}"><a href="{{route('news.index')}}"><i class="fa fa-angle-double-right"></i> <span>News</span></a></li>
+                    <li class="{{$route=='category.index' || $route=='category.create' || $route=='category.edit' ?'active':''}}"><a href="{{route('category.index')}}"><i class="fa fa-angle-double-right"></i> <span>Category</span></a></li>
+                    <li class="{{$route=='news.index' || $route=='news.create' || $route=='news.edit' || $route=='news.view' ?'active':'' }}"><a href="{{route('news.index')}}"><i class="fa fa-angle-double-right"></i> <span>News</span></a></li>
                 </ul>
             </li>
         </ul>

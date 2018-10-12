@@ -1,0 +1,22 @@
+{
+  "name": "news",
+  "description": "",
+  "main": "",
+  "authors": [
+    "Dil Krishna <dilkrishnapila@gmail.com>"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/dilpila/news-portal",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "public/bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "ckeditor": "^4.7.2",
+    "cropperjs": "^1.0.0"
+  }
+}

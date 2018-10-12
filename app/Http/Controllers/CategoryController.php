@@ -111,5 +111,6 @@ class CategoryController extends Controller
             return response(200);
         } else {
             return response(500);
-        }    }
+        }
+    }
 }

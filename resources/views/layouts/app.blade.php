@@ -27,6 +27,9 @@
         .error{
             color: red;
         }
+        .hidden {
+            display: none;
+        }
     </style>
     @include('partials.top_nav')
     @include('partials.side_nav')

@@ -13,8 +13,8 @@ require('jquery-validation');
 // Sweetalert
 require('sweetalert');
 
-// Ckeditor
-require('ckeditor');
+// // Ckeditor
+// require('ckeditor');
 
 
 
