@@ -108,7 +108,6 @@ if (isset($news) && sizeof($news->toArray())) {
     </style>
 @endsection
 
-
 @section('content')
     <div class="box">
         <div class="box-body">

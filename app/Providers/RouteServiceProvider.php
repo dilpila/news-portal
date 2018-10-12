@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
+use File;
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -54,6 +55,16 @@ class RouteServiceProvider extends ServiceProvider
         Route::middleware('web')
              ->namespace($this->namespace)
              ->group(base_path('routes/web.php'));
+
+        Route::middleware(['web'])
+            ->namespace($this->namespace)
+            ->group(function(){
+                $files = File::allFiles(base_path('routes'.DIRECTORY_SEPARATOR.'portal'));
+                foreach($files as $file){
+                    //dd($file->getRealPath());
+                    require_once $file->getRealPath();
+                }
+            });
     }
 
     /**
