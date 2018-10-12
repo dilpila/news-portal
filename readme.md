@@ -8,7 +8,7 @@ Simple CRUD operation of NEWS portal
 
 Via Composer
 
-This project has been on with following version of npm and bower
+This project has been setup on following version of npm and bower
 npm -v
 6.4.1
 
