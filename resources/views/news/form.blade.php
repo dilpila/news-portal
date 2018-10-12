@@ -35,7 +35,6 @@ if (isset($errors) && sizeof($errors)) {
     <div class="box">
         <form role="form" id="form" action="{{$route}}" method="{{$method}}" enctype="multipart/form-data">
             {{csrf_field()}}
-
             <div class="row">
                 <div class="col-lg-8 col-sm-8">
                     <div class="box-body">
