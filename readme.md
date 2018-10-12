@@ -8,6 +8,13 @@ Simple CRUD operation of NEWS portal
 
 Via Composer
 
+This project has been on with following version of npm and bower
+npm -v
+6.4.1
+
+bower -v
+1.8.4
+
 run
 ``` bash
 $ comoser install
