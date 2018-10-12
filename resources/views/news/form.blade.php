@@ -180,7 +180,7 @@ if (isset($errors) && sizeof($errors)) {
 
                 if (form.valid()) {
                     if (checkedIds.length < 1) {
-                        alert('Please at least one Category.');
+                        alert('Please select at least one Category.');
                     } else {
                         form.submit()
                     }
