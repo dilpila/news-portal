@@ -57,7 +57,7 @@ class CategoryController extends Controller
     {
         $attr = $request->except('_token');
         $this->categoryService->create($attr);
-        return redirect()->route('category.index')->with('success', 'Category has been added successfully');
+        return redirect()->route('category.index')->with('success', trans('news-portal.success-add'));
 
     }
 
@@ -81,7 +81,7 @@ class CategoryController extends Controller
     public function edit($id)
     {
         $this->data['category'] = $this->categoryService->find($id);
-        return view('category.form',$this->data);
+        return view('category.form', $this->data);
     }
 
     /**
@@ -94,8 +94,8 @@ class CategoryController extends Controller
     public function update(CategoryRequest $request, $id)
     {
         $attr = $request->except('_token');
-        $this->categoryService->update($attr,$id);
-        return redirect()->route('category.index')->with('success', 'Category has been updated successfully');
+        $this->categoryService->update($attr, $id);
+        return redirect()->route('category.index')->with('success', trans('news-portal.success-update'));
     }
 
     /**

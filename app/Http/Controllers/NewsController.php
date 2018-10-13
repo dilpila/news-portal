@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\NewsRequest;
 use App\Http\Services\CategoryService;
 use App\Http\Services\NewsService;
 use Illuminate\Http\Request;
@@ -58,33 +59,32 @@ class NewsController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(NewsRequest $request)
     {
         $catagories = explode(',', $request->categoryIds[0]);
+
         $attr = $request->except('image', '_token', 'inputCroppedPic', 'category', 'categoryIds');
+        try {
+            if ($request->has('inputCroppedPic') && !is_null($request->inputCroppedPic)) {
 
-//        dd($request->publish_date);
-//        $attr['publish_date'] = date_format($request->publish_date,'Y-m-d 00:00:00');
-//        dd($attr['publish_date']);
-
-        if ($request->has('inputCroppedPic') && !is_null($request->inputCroppedPic)) {
-
-            if (!File::exists($this->imageSavePath)) {
-                File::makeDirectory($this->imageSavePath, 0775, true, true);
+                if (!File::exists($this->imageSavePath)) {
+                    File::makeDirectory($this->imageSavePath, 0775, true, true);
+                }
+                $destinationPath = $this->imageSavePath . $this->getDateFormatFileName('jpg');
+                Image::make($request->input('inputCroppedPic'))
+                    ->encode('jpg')
+                    ->save(public_path($destinationPath));
+                $attr['image'] = $destinationPath;
             }
-            $destinationPath = $this->imageSavePath . $this->getDateFormatFileName('jpg');
-            Image::make($request->input('inputCroppedPic'))
-                ->encode('jpg')
-                ->save(public_path($destinationPath));
-            $attr['image'] = $destinationPath;
+            $news = $this->newsService->create($attr);
+
+            $news->categories()->sync($catagories);
+
+            return redirect()->route('news.index')->with('success', trans('news-portal.success-add'));
+
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', trans('news-portal.error'));
         }
-        $news = $this->newsService->create($attr);
-
-        $news->categories()->sync($catagories);
-
-        return redirect()->route('news.index')->with('success', 'data  has been added successfully');
-
-
     }
 
     /**
@@ -97,7 +97,7 @@ class NewsController extends Controller
     {
         $this->data['news'] = $this->newsService->find($id);
         $this->data['categories'] = $this->categoryService->getAll();
-        return view('news.show',$this->data);
+        return view('news.show', $this->data);
     }
 
     /**
@@ -110,7 +110,7 @@ class NewsController extends Controller
     {
         $this->data['news'] = $this->newsService->find($id);
         $this->data['categories'] = $this->categoryService->getAll();
-        return view('news.form',$this->data);
+        return view('news.form', $this->data);
     }
 
     /**
@@ -120,25 +120,32 @@ class NewsController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(NewsRequest $request, $id)
     {
         $news = $this->newsService->find($id);
-        $catagories = explode(',', $request->categoryIds[0]);
+        $cat = explode(',', $request->categoryIds[0]);
+        $catagories = array_diff($cat, array(""));
         $attr = $request->except('image', '_token', 'inputCroppedPic', 'category', 'categoryIds');
 
-        if ($request->has('inputCroppedPic') && !is_null($request->inputCroppedPic)) {
-            $destinationPath = $this->imageSavePath . $this->getDateFormatFileName('jpg');
-            $path = public_path() . $news->logo;
-            \File::delete($path);
-            Image::make($request->input('inputCroppedPic'))
-                ->encode('jpg')
-                ->save(public_path($destinationPath));
-            $attr['image'] = $destinationPath;
-        }
-        $this->newsService->update($attr, $id);
-        $news->categories()->sync($catagories);
+        try {
+            if ($request->has('inputCroppedPic') && !is_null($request->inputCroppedPic)) {
+                $destinationPath = $this->imageSavePath . $this->getDateFormatFileName('jpg');
+                $path = public_path() . $news->logo;
+                \File::delete($path);
+                Image::make($request->input('inputCroppedPic'))
+                    ->encode('jpg')
+                    ->save(public_path($destinationPath));
+                $attr['image'] = $destinationPath;
+            }
+            $this->newsService->update($attr, $id);
+            $news->categories()->sync($catagories);
 
-        return redirect()->route('news.index')->with('success', 'Data  has been Updated successfully');
+            return redirect()->route('news.index')->with('success', trans('news-portal.success-update'));
+
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', trans('news-portal.error'));
+        }
+
 
     }
 
